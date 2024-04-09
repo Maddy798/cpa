@@ -15,6 +15,10 @@ app.use("/api/auth/", AuthRoutes);
 app.use("/api/chatroom/", ChatRoomsRoutes);
 app.use("/api/messages/", MessagesRoutes);
 
+app.get("/", (req, res) => {
+  res.send({ error: "hehe" });
+});
+
 mongoose
   .connect(uri)
   .then(() => {
