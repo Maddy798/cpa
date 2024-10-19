@@ -19,6 +19,41 @@ app.use("/api/chatroom/", ChatRoomsRoutes);
 app.use("/api/messages/", MessagesRoutes);
 app.use("/api/messages/", MessagesRoutes);
 
+app.post("/send-email", (req, res) => {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.hostinger.com",
+    port: 465, // or 587 for TLS
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: "support@flisionstudio.tech",
+      pass: "Eric@missyou1",
+    },
+  });
+
+  // Define email options
+  const mailOptions = {
+    from: "support@flisionstudio.tech", // Sender address
+    to: "contact@flisionstudio.tech", // List of recipients
+    subject: "Contact Form Submission", // Email subject
+    text: `<p>
+          email: ${req.body.email} <br/>
+          phone: ${req.body.phone} <br/>
+          Full Name: ${req.body.fullname} <br/>
+          Message: ${req.body.message} <br/>
+      </p>`, // Plain text body
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+      res.status(500).send("Error sending email");
+    } else {
+      console.log("Email sent:", info.response);
+      res.send("Form submitted successfully!");
+    }
+  });
+});
+
 app.get("/", (req, res) => {
   res.send({ error: "hehe" });
 });
